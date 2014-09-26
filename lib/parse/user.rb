@@ -5,7 +5,7 @@ require 'parse/error'
 require 'parse/object'
 
 module Parse
-  class User < Parse::Object
+  class User < Parse::Model
 
     def self.authenticate(username, password)
       body = {
