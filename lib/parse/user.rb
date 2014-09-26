@@ -2,7 +2,7 @@
 require 'parse/protocol'
 require 'parse/client'
 require 'parse/error'
-require 'parse/object'
+require 'parse/model'
 
 module Parse
   class User < Parse::Model
