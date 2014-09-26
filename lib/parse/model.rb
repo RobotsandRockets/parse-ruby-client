@@ -2,8 +2,16 @@
 module Parse
   class Model < Parse::Object
 
+    # Override this method if your model name is different from the
+    # Parse object name you're using.
+    #
+    def self.parse_object_name
+      return '_User' if self.is_a?(Parse::User)
+      self.to_s
+    end
+
     def initialize(data=nil)
-      super(self.class.to_s,data)
+      super(self.class.parse_object_name,data)
     end
 
     def self.find(object_id)
@@ -11,7 +19,7 @@ module Parse
     end
 
     def self.find_by(query_hash)
-      self.new Parse::Query.new(self.to_s).eq(query_hash).first
+      self.new Parse::Query.new(parse_object_name).eq(query_hash).first
     end
 
     def self.method_missing(m, *args, &block)
