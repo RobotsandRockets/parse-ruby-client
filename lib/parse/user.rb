@@ -25,8 +25,8 @@ module Parse
     end
 
     def initialize(data = nil)
-      data["username"] = data[:username] if data[:username]
-      data["password"] = data[:password] if data[:password]
+      data['username'] = data[:username] if data && data[:username]
+      data['password'] = data[:password] if data && data[:password]
       super(Parse::Protocol::CLASS_USER, data)
     end
 
