@@ -27,7 +27,7 @@ module Parse
     def initialize(data = nil)
       data['username'] = data[:username] if data && data[:username]
       data['password'] = data[:password] if data && data[:password]
-      super(Parse::Protocol::CLASS_USER, data)
+      super(data) # super(Parse::Protocol::CLASS_USER, data)
     end
 
     def uri
