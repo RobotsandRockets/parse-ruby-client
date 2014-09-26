@@ -6,7 +6,7 @@ module Parse
     # Parse object name you're using.
     #
     def self.parse_object_name
-      return '_User' if self.is_a?(Parse::User)
+      return '_User' if self < Parse::User
       self.to_s
     end
 
