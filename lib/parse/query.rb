@@ -3,6 +3,38 @@ require 'cgi'
 
 module Parse
 
+  class QueryResult
+    include Enumerable
+
+    attr_accessor :per_page, :total_pages, :count, :record_klass, :raw_result, :skip, :current_page
+
+    def initialize(members,options={})
+      @raw_result = options.merge Protocol::KEY_RESULTS => members
+      options.inject({}) { |m,i| m["@#{i.first}"] = i.last; m }.each &method(:instance_variable_set)
+
+      @members     = @record_klass ? members.map { |i| @record_klass.new(i) } : members
+      @per_page    = @limit if @limit
+
+      if @count && @per_page
+        @total_pages  = ( @count / @per_page.to_f ).ceil
+        @current_page = ( @skip == 0 ) ? 1 : (( @skip / @per_page.to_f ).ceil + 1)
+      end
+    end
+
+    def page
+      @current_page
+    end
+
+    def total_records
+      @count
+    end
+
+    def each(&block)
+      @members.each(&block)
+    end
+
+  end
+
   class Query
     attr_accessor :where
     attr_accessor :class_name
@@ -12,12 +44,24 @@ module Parse
     attr_accessor :skip
     attr_accessor :count
     attr_accessor :include
+    attr_accessor :record_klass
 
     def initialize(cls_name)
       @class_name = cls_name
       @where = {}
       @order = :ascending
       @ors = []
+    end
+
+    def paginate(page=1,per_page=100)
+      if page.is_a?(Hash)
+        per_page = page[:per_page].to_i
+        page     = page[:page].to_i
+      end
+      self.limit = per_page
+      self.skip  = ( page - 1 ) * per_page
+      self.count
+      self
     end
 
     def add_constraint(field, constraint)
@@ -143,9 +187,10 @@ module Parse
       if response.is_a?(Hash) && response.has_key?(Protocol::KEY_RESULTS) && response[Protocol::KEY_RESULTS].is_a?(Array)
         parsed_results = response[Protocol::KEY_RESULTS].map{|o| Parse.parse_json(class_name, o)}
         if response.keys.size == 1
-          parsed_results
+          Parse::QueryResult.new parsed_results, record_klass: @record_klass
         else
-          response.dup.merge(Protocol::KEY_RESULTS => parsed_results)
+          # response.dup.merge(Protocol::KEY_RESULTS => parsed_results)
+          Parse::QueryResult.new parsed_results, response.except(Protocol::KEY_RESULTS).merge(limit:@limit,skip:@skip)
         end
       else
         raise ParseError.new("query response not a Hash with #{Protocol::KEY_RESULTS} key: #{response.class} #{response.inspect}")

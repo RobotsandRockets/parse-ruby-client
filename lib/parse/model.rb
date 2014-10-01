@@ -18,8 +18,29 @@ module Parse
       find_by_object_id(object_id)
     end
 
+    def self.all
+      query.get.map { |r| self.new(r) }
+    end
+
+    def self.paginate(*params)
+      query.paginate(*params)
+    end
+
+    def self.query
+      Parse::Query.new(parse_object_name)
+    end
+
     def self.find_by(query_hash)
       self.new Parse::Query.new(parse_object_name).eq(query_hash).first
+    end
+
+    def model_name
+      self.class.parse_object_name.gsub('_','').underscore
+    end
+
+    def method_missing(m,*args,&block)
+      return self[m.to_s] if self.keys.include?(m.to_s)
+      super
     end
 
     def self.method_missing(m, *args, &block)
