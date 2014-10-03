@@ -33,6 +33,11 @@ module Parse
       @members.each(&block)
     end
 
+    def method_missing(meth, *args, &block)
+      return @members.send meth, *args if @members.respond_to?(meth)
+      super
+    end
+
   end
 
   class Query
