@@ -10,7 +10,9 @@ module Parse
 
     def initialize(members,options={})
       @raw_result = options.merge Protocol::KEY_RESULTS => members
-      options.inject({}) { |m,i| m["@#{i.first}"] = i.last; m }.each &method(:instance_variable_set)
+      options.inject({}) { |m,i| m["@#{i.first}"] = i.last; m }.each_pair do |var,val|
+        instance_variable_set var.to_sym, val
+      end
 
       @members     = @record_klass ? members.map { |i| @record_klass.new(i) } : members
       @per_page    = @limit if @limit
