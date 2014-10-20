@@ -14,8 +14,8 @@ module Parse
         instance_variable_set var.to_sym, val
       end
 
-      @members     = @record_klass ? members.map { |i| @record_klass.new(i) } : members
-      @per_page    = @limit if @limit
+      @members  = @record_klass ? members.map { |i| @record_klass.new(i) } : members
+      @per_page = @limit if @limit
 
       if @count && @per_page
         @total_pages  = ( @count / @per_page.to_f ).ceil

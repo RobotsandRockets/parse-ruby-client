@@ -22,6 +22,11 @@ module Parse
       query.get.map { |r| self.new(r) }
     end
 
+    def self.fields(*fields)
+      @@parse_fields ||= []
+      @@parse_fields.concat(fields.map(&:to_sym))
+    end
+
     def self.paginate(*params)
       query.paginate(*params)
     end
@@ -39,7 +44,7 @@ module Parse
     end
 
     def method_missing(m,*args,&block)
-      return self[m.to_s] if self.keys.include?(m.to_s)
+      return self[m.to_s] if self.keys.concat(@@parse_fields || []).include?(m.to_s)
       super
     end
 
