@@ -40,6 +40,7 @@ module Parse
     end
 
     def model_name
+      return ActiveModel::Name.new(self.class) if defined?(ACtiveModel::Name)
       self.class.parse_object_name.gsub('_','').underscore
     end
 
