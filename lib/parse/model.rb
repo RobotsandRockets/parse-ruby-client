@@ -36,7 +36,7 @@ module Parse
     end
 
     def self.find_by(query_hash)
-      self.new Parse::Query.new(parse_object_name).eq(query_hash).first
+      self.new self.query.eq(query_hash).first
     end
 
     def model_name
@@ -45,7 +45,8 @@ module Parse
     end
 
     def method_missing(m,*args,&block)
-      return self[m.to_s] if self.keys.concat(@@parse_fields || []).include?(m.to_s)
+      return self[m.to_s[0..-2]] = args.first if m.to_s.ends_with?('=')
+      return self[m.to_s] if self.keys.concat(@@parse_fields || []).include?(m.to_sym)
       super
     end
 
