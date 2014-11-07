@@ -7,7 +7,7 @@ module Parse
 
   # Represents an individual Parse API object.
   class Object < Hash
-    attr_reader :parse_object_id
+    attr_accessor :parse_object_id
     attr_reader :class_name
     attr_reader :created_at
     attr_reader :updated_at
