@@ -115,8 +115,8 @@ module Parse
 
     CLASS_INSTALLATION = "_Installation"
 
-    USER_LOGIN_URI  = "/login"
-    PASSWORD_RESET_URI = "/requestPasswordReset"
+    USER_LOGIN_URI  = "login"
+    PASSWORD_RESET_URI = "requestPasswordReset"
 
     CLOUD_FUNCTIONS_PATH = "functions"
 
@@ -131,16 +131,16 @@ module Parse
     # ----------------------------------------
 
     def Protocol.config_uri
-      "/config"
+      "config"
     end
 
     # Construct a uri referencing a given Parse object
     # class or instance (of object_id is non-nil).
     def Protocol.class_uri(class_name, object_id = nil)
       if object_id
-        "/classes/#{class_name}/#{object_id}"
+        "classes/#{class_name}/#{object_id}"
       else
-        "/classes/#{class_name}"
+        "classes/#{class_name}"
       end
     end
 
@@ -148,9 +148,9 @@ module Parse
     # class or instance (of object_id is non-nil).
     def Protocol.installation_uri(object_id = nil)
       if object_id
-        "/installations/#{object_id}"
+        "installations/#{object_id}"
       else
-        "/installations"
+        "installations"
       end
     end
 
@@ -158,9 +158,9 @@ module Parse
     # instance or the users category.
     def Protocol.user_uri(user_id = nil)
       if user_id
-        "/users/#{user_id}"
+        "users/#{user_id}"
       else
-        "/users"
+        "users"
       end
     end
 
@@ -171,15 +171,15 @@ module Parse
 
     # Construct a uri to send a push notification via the API.
     def Protocol.push_uri
-      "/push"
+      "push"
     end
 
     def Protocol.cloud_function_uri(function_name)
-      "/#{CLOUD_FUNCTIONS_PATH}/#{function_name}"
+      "#{CLOUD_FUNCTIONS_PATH}/#{function_name}"
     end
 
     def Protocol.batch_request_uri
-      "/#{BATCH_REQUEST_URI}"
+      "#{BATCH_REQUEST_URI}"
     end
   end
 end
