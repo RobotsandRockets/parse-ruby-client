@@ -27,7 +27,7 @@ module Parse
       @max_retries    = data[:max_retries] || 3
       @logger         = data[:logger] || Logger.new(STDERR).tap{|l| l.level = Logger::INFO}
 
-      options = {:request => {:timeout => 30, :open_timeout => 30}}
+      options = {:request => {:timeout => 30, :open_timeout => 300}}
 
       @session = Faraday.new(host, options) do |c|
         c.request :json
