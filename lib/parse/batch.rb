@@ -45,7 +45,7 @@ module Parse
     def run!
       uri = Parse::Protocol.batch_request_uri
       body = {:requests => @requests}.to_json
-      @client.request(uri, :post, body)
+      @client.request(uri, :post, body).body
     end
 
   end

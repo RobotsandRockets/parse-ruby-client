@@ -38,7 +38,7 @@ module Parse
       body.merge!({ :push_time => @push_time }) if @push_time
       body.merge!({ :type => @type }) if @type
 
-      response = Parse.client.request uri, :post, body.to_json, nil
+      response = Parse.client.request(uri, :post, body.to_json, nil).body
     end
 
   end

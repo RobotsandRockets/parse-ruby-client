@@ -189,7 +189,7 @@ module Parse
       set_order(query)
       [:count, :limit, :skip, :include].each {|a| merge_attribute(a, query)}
       Parse.client.logger.info{"Parse query for #{uri} #{query.inspect}"}
-      response = Parse.client.request uri, :get, nil, query
+      response = Parse.client.request(uri, :get, nil, query).body
 
       if response.is_a?(Hash) && response.has_key?(Protocol::KEY_RESULTS) && response[Protocol::KEY_RESULTS].is_a?(Array)
         parsed_results = response[Protocol::KEY_RESULTS].map{|o| Parse.parse_json(class_name, o)}

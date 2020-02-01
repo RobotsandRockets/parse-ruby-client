@@ -65,7 +65,7 @@ module Parse
       end
 
       body = safe_hash.to_json
-      data = Parse.client.request(self.uri, method, body)
+      data = Parse.client.request(self.uri, method, body).body
 
       if data
         # array operations can return mutated view of array which needs to be parsed
@@ -180,7 +180,7 @@ module Parse
       #end
 
       body = {field => Parse::Increment.new(amount)}.to_json
-      data = Parse.client.request(self.uri, :put, body)
+      data = Parse.client.request(self.uri, :put, body).body
       parse data
       self
     end

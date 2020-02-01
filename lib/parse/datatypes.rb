@@ -328,7 +328,7 @@ module Parse
 
     def save
       uri = Parse::Protocol.file_uri(@local_filename)
-      resp = Parse.client.request(uri, :post, @body, nil, @content_type)
+      resp = Parse.client.request(uri, :post, @body, nil, @content_type).body
       @parse_filename = resp["name"]
       @url = resp["url"]
       resp

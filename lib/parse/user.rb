@@ -13,7 +13,7 @@ module Parse
         "password" => password
       }
 
-      response = Parse.client.request(Parse::Protocol::USER_LOGIN_URI, :get, nil, body)
+      response = Parse.client.request(Parse::Protocol::USER_LOGIN_URI, :get, nil, body).body
       Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
 
       new(response)

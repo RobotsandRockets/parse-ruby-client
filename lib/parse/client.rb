@@ -41,7 +41,6 @@ module Parse
           exceptions: ['Faraday::Error::TimeoutError', 'Faraday::Error::ParsingError', 'Parse::ParseProtocolRetry']
         c.use Faraday::ExtendedParseJson
 
-        c.response :logger, @logger
         c.adapter Faraday.default_adapter
 
         yield(c) if block_given?
@@ -66,23 +65,23 @@ module Parse
         headers[key] = value if value
       end
 
-      @session.send(method, uri, query || body || {}, headers).body
+      @session.send(method, uri, query || body || {}, headers)
     end
 
     def get(uri)
-      request(uri)
+      request(uri).body
     end
 
     def post(uri, body)
-      request(uri, :post, body)
+      request(uri, :post, body).body
     end
 
     def put(uri, body)
-      request(uri, :put, body)
+      request(uri, :put, body).body
     end
 
     def delete(uri)
-      request(uri, :delete)
+      request(uri, :delete).body
     end
 
   end
